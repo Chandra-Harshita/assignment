@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document, Model } from 'mongoose'
 
-enum serviceEnum {
+export enum serviceEnum {
   MAID = 'maid',
   COOK = 'cook',
   NURSE = 'nurse',
@@ -9,28 +9,28 @@ enum serviceEnum {
   NEWSPAPER = 'newspaper',
   LAUNDRY = 'laundry',
 }
-enum fileTypeEnum {
+export enum fileTypeEnum {
   ADHAAR = 'Adhaar card',
   PAN = 'PAN card',
   VOTER = 'Voter ID',
   PASSWORD = 'Passport',
 }
-enum OrganizationEnum {
+export enum OrganizationEnum {
   ASBL = 'ASBL',
   SPRINGS = 'Springs Helpers',
 }
-enum genderEnum {
+export enum genderEnum {
   MALE = 'male',
   FEMALE = 'female',
   OTHERS = 'others',
 }
-enum vehicleTypesEnum {
+export enum vehicleTypesEnum {
   NONE = 'none',
   AUTO = 'auto',
   BIKE = 'bike',
   CAR = 'car',
 }
-enum languagesEnum {
+export enum languagesEnum {
   TELUGU = 'telugu',
   ENGLISH = 'english',
   HINDI = 'hindi',
@@ -48,6 +48,8 @@ export interface IUser extends Document {
   vehicleType?: string
   fileType: string
   filePath: string
+  employeeCode?:number
+  profilePicturePath?:string
 }
 
 const userSchema: Schema = new Schema({
@@ -73,6 +75,8 @@ const userSchema: Schema = new Schema({
   filePath: { type: String, required: true },
   fileType: { type: String, enum: Object.values(fileTypeEnum), required: true },
   vehicleType: { type: String, enum: Object.values(vehicleTypesEnum) },
-})
+  employeeCode:{type: Number,required:true},
+  profilePicturePath:{type:String}
+},{timestamps:true})
 
 export const userModel: Model<IUser> = mongoose.model<IUser>('User', userSchema)

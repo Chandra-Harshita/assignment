@@ -6,10 +6,11 @@ import {
   deleteHelper,
   addHelper,
 } from '../service/helperFunctions'
+import { upload } from '../service/multer'
 export const router = express.Router()
 
 router.get('/get', getAllHelpers)
-router.post('/add', addHelper)
+router.post('/add', upload.any(),addHelper)
 router.put('/update/:id', updateHelper)
 router.delete('/delete/:id', deleteHelper)
 router.get('/get/:id', getAHelper)
