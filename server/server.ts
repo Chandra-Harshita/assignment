@@ -2,10 +2,12 @@ import express from 'express'
 import config from './config/config'
 import mongoose from 'mongoose'
 import { router } from './routes/helperRoutes'
+import cors from 'cors'
 //import { createUser } from './example'
 const app = express()
 
 app.use(express.json())
+app.use(cors())
 
 mongoose
   .connect(config.mongo_url)

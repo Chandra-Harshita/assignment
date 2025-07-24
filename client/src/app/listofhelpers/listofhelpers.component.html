@@ -1,0 +1,16 @@
+<div class="container">
+    <mat-list class="left-list">
+        <mat-list-item *ngFor="let helper of helpersData" class="floating-item" (click)="onHelperClick(helper._id)">
+            <mat-icon matListItemIcon>
+                <img [src]="helper.profilePicturePath ? '' : '../assets/default-profile.png'" alt="profile"
+                    height="40px" width="40px" />
+            </mat-icon>
+            <h3 matListItemTitle>{{ helper.name }}</h3>
+            <p matListItemLine>
+                <span class="demo-2">{{ helper.typeOfService }}</span>
+            </p>
+        </mat-list-item>
+    </mat-list>
+
+    <app-display-helper class="right-display" [helperid]="helper"></app-display-helper>
+</div>

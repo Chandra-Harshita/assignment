@@ -48,8 +48,9 @@ export interface IUser extends Document {
   vehicleType?: string
   fileType: string
   filePath: string
-  employeeCode?:number
+  employeeCode:number
   profilePicturePath?:string
+  otherDocuments?:string[]
 }
 
 const userSchema: Schema = new Schema({
@@ -76,7 +77,8 @@ const userSchema: Schema = new Schema({
   fileType: { type: String, enum: Object.values(fileTypeEnum), required: true },
   vehicleType: { type: String, enum: Object.values(vehicleTypesEnum) },
   employeeCode:{type: Number,required:true},
-  profilePicturePath:{type:String}
+  profilePicturePath:{type:String},
+  otherDocuments:{type:[String]}
 },{timestamps:true})
 
 export const userModel: Model<IUser> = mongoose.model<IUser>('User', userSchema)

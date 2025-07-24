@@ -1,0 +1,52 @@
+<div *ngIf="!helper">
+    hi no data;
+</div>
+
+<div *ngIf="helper" class="helper-card">
+    <div class="header">
+        <img *ngIf="helper.profilePicturePath" [src]="helper.profilePicturePath" alt="Profile" class="avatar" />
+        <div class="info">
+            <h2>{{ helper.name }}</h2>
+            <p>{{ helper.typeOfService }}</p>
+        </div>
+        <div class="actions">
+            <button mat-fab color="">
+                <mat-icon>edit</mat-icon>
+            </button>
+
+            <button mat-fab color="">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="section">
+        <h4>IDENTIFICATION</h4>
+        <p>Employee Code: {{ helper.employeeCode }}</p>
+        <p>KYC Document: <a [href]="helper.filePath" target="_blank">View {{ helper.fileType }}</a></p>
+        <p *ngIf="helper.otherDocuments?.length">Other Documents:</p>
+        <ul *ngIf="helper.otherDocuments?.length">
+            <li *ngFor="let doc of helper.otherDocuments">
+                <a [href]="doc" target="_blank">View</a>
+            </li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h4>PERSONAL DETAILS</h4>
+        <p>Gender: {{ helper.gender }}</p>
+        <p>Phone: {{ helper.phone }}</p>
+        <p>Email: {{ helper.email || '-' }}</p>
+        <p *ngIf="helper && helper?.languages?.length">Languages: {{ (helper && helper.languages?.length
+            )?helper.languages?.join(', ') : '' }}</p>
+        <p *ngIf="helper.vehicleType">Vehicle Type: {{ helper.vehicleType }}</p>
+    </div>
+
+    <div class="section">
+        <h4>ORGANIZATION</h4>
+        <p>Organization: {{ helper.organization }}</p>
+        <p>Joined On: {{ helper.createdAt ? helper.createdAt.split('T')[0]:'-' }}</p>
+    </div>
+</div>
