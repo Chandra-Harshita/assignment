@@ -1,0 +1,13 @@
+<div class="heading">
+    <h2>Upload KYC Document</h2>
+    <button class="close" (click)="closeDialogFunc()">X</button>
+</div>
+<form>
+    <div class="form-group">
+        <label for="vehicletype">Select Document Type*</label>
+        <mat-select id="vehicletype" [formControl]="documentType" required>
+            <mat-option value="" disabled selected hidden>Document Type</mat-option>
+            <mat-option *ngFor="let fileType of fileTypes" [value]="fileType">{{fileType}}</mat-option>
+        </mat-select>
+    </div>
+</form>

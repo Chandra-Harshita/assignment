@@ -1,5 +1,82 @@
-<mat-toolbar color="primary">
-    My App
-</mat-toolbar>
+<div class="head">
+    <h1 class="header-title">Helper Details</h1>
+    <p class="subtext">Track, Add & Manage all your helpers at one place</p>
+</div>
+<form class="helper-form">
+    <div class="form-group photo-upload">
+        <label for="photoUpload"><strong>Upload Photo</strong></label>
+        <div class="upload-box">
+            <span class="upload-icon">📷</span><br>
+            <input type="file" accept=".png, .jpeg, .jpg" id="photoUpload">
+            <div class="upload-note">Upload photo (.png, .jpeg) size &lt; 5 MB</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="typeOfService">Type of Service*</label>
+        <mat-select id="typeOfService" [formControl]="service" required>
+            <mat-option value="" disabled selected hidden>Select Type of Service</mat-option>
+            <mat-option *ngFor="let service of services" [value]="service">{{service}}</mat-option>
+        </mat-select>
+    </div>
+    <div class="form-group">
+        <label for="Organization">Organization Name*</label>
+        <mat-select id="Organization" [formControl]="organization" required>
+            <mat-option value="" disabled selected hidden>Select Organization</mat-option>
+            <mat-option *ngFor="let organization of organizations" [value]="organization">{{organization}}</mat-option>
+        </mat-select>
+    </div>
+    <div class="form-group">
+        <label for="name">Full Name*</label>
+        <input id="name" type="text" [formControl]="name" required>
+    </div>
+    <div class="form-group">
+        <label for="languages">Languages*</label>
+        <mat-select [formControl]="languagesSelected" multiple>
+            <mat-select-trigger>
+                {{languagesSelected.value?.[0] || ''}}
+                <span *ngIf="(languagesSelected.value?.length || 0) > 1" class="example-additional-selection">
+                    +{{(languagesSelected.value?.length || 0) - 1}}
+                </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let language of languages" [value]="language">
+                {{language}}
+            </mat-option>
+        </mat-select>
+    </div>
+    <div class="form-group">
+        <label>Gender*</label>
+        <mat-radio-group [formControl]="gender" class="gender-group">
+            <mat-radio-button value="male">Male</mat-radio-button>
+            <mat-radio-button value="female">Female</mat-radio-button>
+            <mat-radio-button value="others">Other</mat-radio-button>
+        </mat-radio-group>
+    </div>
+    <div class="form-group">
+        <label for="phone">Phone Number*</label>
+        <input id="phone" type="tel" [formControl]="phone" required placeholder="+91 XXXXXXXXXX">
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" [formControl]="email" required placeholder="example@domain.com">
+    </div>
+    <div class="form-group">
+        <label for="vehicletype">Vehicle Type*</label>
+        <mat-select id="vehicletype" [formControl]="vehicle" required>
+            <mat-option value="" disabled selected hidden>Select Vehicle Type</mat-option>
+            <mat-option *ngFor="let vehicleType of vehicleTypes" [value]="vehicleType">{{vehicleType}}</mat-option>
+        </mat-select>
+    </div>
+    <div *ngIf="vehicle.value? vehicle.value!='none': false" class="form-group">
+        <label for="vehicleNumber"> Vehicle Number*</label>
+        <input type="text" id="vehicleNumber" [formControl]="vehicleNumber" required>
+    </div>
+    <div class="form-group">
+        <div>KYC Document*</div>
+        <button class="kyc" (click)="openDialog()">+</button>
+    </div>
+    <div class="form-group">
+        <button type="submit" mat-raised-button color="primary" >Submit</button>
+    </div>
 
-<button mat-raised-button color="accent">Click Me</button>
+</form>
+<app-kyc-doc-dialog *ngIf="false" [closeDialog]="closeDialog"></app-kyc-doc-dialog>

@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { HelpersdetailsService } from '../helpersdetails.service';
 import { Helper } from '../helpers.model';
-import { Console } from 'console';
+
 
 @Component({
   selector: 'app-display-helper',

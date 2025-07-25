@@ -1,7 +1,7 @@
 // app.module.ts
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -18,15 +18,18 @@ import { HttpClientModule } from '@angular/common/http';
 import { ListofhelpersComponent } from './listofhelpers/listofhelpers.component';
 import { MatListModule } from '@angular/material/list';
 import { HomeComponent } from './home/home.component';
-
-
+import {MatSelectModule} from '@angular/material/select';
+import {MatRadioModule} from '@angular/material/radio';
+import {MatDialogModule} from '@angular/material/dialog';
+import { KycDocDialogComponent } from './kyc-doc-dialog/kyc-doc-dialog.component';
 @NgModule({
   declarations: [
     AppComponent,
     AddHelperComponent,
     DisplayHelperComponent,
     ListofhelpersComponent,
-    HomeComponent
+    HomeComponent,
+    KycDocDialogComponent
   ],
   imports: [
     MatToolbarModule,
@@ -42,7 +45,12 @@ import { HomeComponent } from './home/home.component';
     MatButtonModule,
     MatIconModule,
     HttpClientModule,
-    MatListModule
+    MatListModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatRadioModule,
+    MatDialogModule
+    
   ],
   providers: [
     provideAnimationsAsync()

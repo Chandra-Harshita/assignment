@@ -38,6 +38,7 @@ export const getAllHelpers = async (req: Request, res: Response) => {
     const helpers: IUser[] = await userModel.find().select('name typeOfService profilePicturePath')
 
     if (helpers.length > 0) {
+      // getResMessage(res, 200, true, 'Helpers fetched', helpers)
       getResMessage(res, 200, true, 'Helpers fetched', helpers)
     } else {
       getResMessage(res, 404, false, 'No helpers found in collection')

@@ -34,6 +34,9 @@ export enum languagesEnum {
   TELUGU = 'telugu',
   ENGLISH = 'english',
   HINDI = 'hindi',
+  TAMIL='tamil',
+  MALAYALAM='malayalam',
+  BANGALI='bengali',
   ALL = 'all',
 }
 
