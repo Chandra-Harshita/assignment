@@ -22,6 +22,7 @@ import {MatSelectModule} from '@angular/material/select';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatDialogModule} from '@angular/material/dialog';
 import { KycDocDialogComponent } from './kyc-doc-dialog/kyc-doc-dialog.component';
+import { DeleteConfirmationDialogComponent } from './delete-confirmation-dialog/delete-confirmation-dialog.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,7 +30,8 @@ import { KycDocDialogComponent } from './kyc-doc-dialog/kyc-doc-dialog.component
     DisplayHelperComponent,
     ListofhelpersComponent,
     HomeComponent,
-    KycDocDialogComponent
+    KycDocDialogComponent,
+    DeleteConfirmationDialogComponent
   ],
   imports: [
     MatToolbarModule,

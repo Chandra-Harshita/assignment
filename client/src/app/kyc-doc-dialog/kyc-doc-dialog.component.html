@@ -1,13 +1,24 @@
-<div class="heading">
-    <h2>Upload KYC Document</h2>
-    <button class="close" (click)="closeDialogFunc()">X</button>
-</div>
-<form>
-    <div class="form-group">
-        <label for="vehicletype">Select Document Type*</label>
-        <mat-select id="vehicletype" [formControl]="documentType" required>
-            <mat-option value="" disabled selected hidden>Document Type</mat-option>
-            <mat-option *ngFor="let fileType of fileTypes" [value]="fileType">{{fileType}}</mat-option>
-        </mat-select>
+<form (ngSubmit)="onUpload()" #kycForm="ngForm">
+  <div class="form-group">
+    <label for="vehicletype">Select Document Type <span class="required">*</span></label>
+    <mat-select id="vehicletype" [formControl]="documentType" required>
+      <mat-option value="" disabled hidden>Select Document Type</mat-option>
+      <mat-option *ngFor="let fileType of fileTypes" [value]="fileType">{{ fileType }}</mat-option>
+    </mat-select>
+    <div class="error-text" *ngIf="documentType.invalid && documentType.touched">
+      Please select a document type.
     </div>
+  </div>
+
+  <div class="form-group">
+    <label>Upload File <span class="required">*</span></label>
+    <input type="file" (change)="onFileSelected($event)" required />
+    <div class="file-name" *ngIf="kycFile">Selected: {{ kycFile.name }}</div>
+    <div class="error-text" *ngIf="showFileError && !kycFile">Please upload a document file.</div>
+  </div>
+
+  <div class="form-group">
+    <button mat-raised-button color="primary" type="submit">Upload</button>
+    <button mat-button type="button" (click)="closeDialog()">Cancel</button>
+  </div>
 </form>

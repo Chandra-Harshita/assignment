@@ -1,82 +1,168 @@
-<div class="head">
-    <h1 class="header-title">Helper Details</h1>
-    <p class="subtext">Track, Add & Manage all your helpers at one place</p>
-</div>
-<form class="helper-form">
-    <div class="form-group photo-upload">
-        <label for="photoUpload"><strong>Upload Photo</strong></label>
-        <div class="upload-box">
-            <span class="upload-icon">📷</span><br>
-            <input type="file" accept=".png, .jpeg, .jpg" id="photoUpload">
-            <div class="upload-note">Upload photo (.png, .jpeg) size &lt; 5 MB</div>
+<div class="container">
+    <div class="sidebar">
+        <div class="back">
+            <button class="back-button" (click)="goTohome()">&lt;</button>
+            <div>Add Helper</div>
         </div>
-    </div>
-    <div class="form-group">
-        <label for="typeOfService">Type of Service*</label>
-        <mat-select id="typeOfService" [formControl]="service" required>
-            <mat-option value="" disabled selected hidden>Select Type of Service</mat-option>
-            <mat-option *ngFor="let service of services" [value]="service">{{service}}</mat-option>
-        </mat-select>
-    </div>
-    <div class="form-group">
-        <label for="Organization">Organization Name*</label>
-        <mat-select id="Organization" [formControl]="organization" required>
-            <mat-option value="" disabled selected hidden>Select Organization</mat-option>
-            <mat-option *ngFor="let organization of organizations" [value]="organization">{{organization}}</mat-option>
-        </mat-select>
-    </div>
-    <div class="form-group">
-        <label for="name">Full Name*</label>
-        <input id="name" type="text" [formControl]="name" required>
-    </div>
-    <div class="form-group">
-        <label for="languages">Languages*</label>
-        <mat-select [formControl]="languagesSelected" multiple>
-            <mat-select-trigger>
-                {{languagesSelected.value?.[0] || ''}}
-                <span *ngIf="(languagesSelected.value?.length || 0) > 1" class="example-additional-selection">
-                    +{{(languagesSelected.value?.length || 0) - 1}}
-                </span>
-            </mat-select-trigger>
-            <mat-option *ngFor="let language of languages" [value]="language">
-                {{language}}
-            </mat-option>
-        </mat-select>
-    </div>
-    <div class="form-group">
-        <label>Gender*</label>
-        <mat-radio-group [formControl]="gender" class="gender-group">
-            <mat-radio-button value="male">Male</mat-radio-button>
-            <mat-radio-button value="female">Female</mat-radio-button>
-            <mat-radio-button value="others">Other</mat-radio-button>
-        </mat-radio-group>
-    </div>
-    <div class="form-group">
-        <label for="phone">Phone Number*</label>
-        <input id="phone" type="tel" [formControl]="phone" required placeholder="+91 XXXXXXXXXX">
-    </div>
-    <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" [formControl]="email" required placeholder="example@domain.com">
-    </div>
-    <div class="form-group">
-        <label for="vehicletype">Vehicle Type*</label>
-        <mat-select id="vehicletype" [formControl]="vehicle" required>
-            <mat-option value="" disabled selected hidden>Select Vehicle Type</mat-option>
-            <mat-option *ngFor="let vehicleType of vehicleTypes" [value]="vehicleType">{{vehicleType}}</mat-option>
-        </mat-select>
-    </div>
-    <div *ngIf="vehicle.value? vehicle.value!='none': false" class="form-group">
-        <label for="vehicleNumber"> Vehicle Number*</label>
-        <input type="text" id="vehicleNumber" [formControl]="vehicleNumber" required>
-    </div>
-    <div class="form-group">
-        <div>KYC Document*</div>
-        <button class="kyc" (click)="openDialog()">+</button>
-    </div>
-    <div class="form-group">
-        <button type="submit" mat-raised-button color="primary" >Submit</button>
+        <ul>
+            <li [class.active]="step === 1">Helper Details</li>
+            <li [class.active]="step === 2">Documents</li>
+            <li [class.active]="step === 3">Review</li>
+        </ul>
     </div>
 
-</form>
-<app-kyc-doc-dialog *ngIf="false" [closeDialog]="closeDialog"></app-kyc-doc-dialog>
+    <div class="right-container">
+        <!-- STEP 1 -->
+        <div *ngIf="step === 1">
+            <div class="head">
+                <h1 class="header-title">Helper Details</h1>
+                <p class="subtext">Track, Add & Manage all your helpers at one place</p>
+            </div>
+
+            <form class="helper-form">
+
+                <div class="form-group photo-upload">
+                    <label for="photoUpload"><strong>Upload Photo</strong></label>
+                    <div class="upload-box" (click)="photoInput.click()">
+                        <div class="upload-note">upload photo</div>
+                        <input #photoInput type="file" accept=".png, .jpeg, .jpg" id="photoUpload" hidden
+                            (change)="onPhotoSelected($event)">
+                    </div>
+                    <div class="upload-note">Upload photo (.png, .jpeg) size &lt; 5 MB</div>
+                    <div class="file-name" *ngIf="photoFile">Selected: {{ photoFile.name }}</div>
+                </div>
+
+
+                <div class="form-group">
+                    <label>Type of Service <span class="required">*</span></label>
+                    <mat-select [formControl]="service" [ngClass]="{ 'invalid': service.invalid && service.touched }">
+                        <mat-option value="" disabled hidden>Select Type of Service</mat-option>
+                        <mat-option *ngFor="let s of services" [value]="s">{{ s }}</mat-option>
+                    </mat-select>
+                    <div class="error-text" *ngIf="service.invalid && service.touched">This field is required.</div>
+                </div>
+
+
+                <div class="form-group">
+                    <label>Organization Name <span class="required">*</span></label>
+                    <mat-select [formControl]="organization"
+                        [ngClass]="{ 'invalid': organization.invalid && organization.touched }">
+                        <mat-option value="" disabled hidden>Select Organization</mat-option>
+                        <mat-option *ngFor="let o of organizations" [value]="o">{{ o }}</mat-option>
+                    </mat-select>
+                    <div class="error-text" *ngIf="organization.invalid && organization.touched">This field is required.
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="name">Full Name <span class="required">*</span></label>
+                    <input id="name" type="text" [formControl]="name"
+                        [ngClass]="{ 'invalid': name.invalid && name.touched }" />
+                    <div class="error-text" *ngIf="name.invalid && name.touched">This field is required.</div>
+                </div>
+
+
+                <div class="form-group">
+                    <label>Languages <span class="required">*</span></label>
+                    <mat-select [formControl]="languagesSelected" multiple
+                        [ngClass]="{ 'invalid': languagesSelected.invalid && languagesSelected.touched }">
+                        <mat-select-trigger>
+                            {{ languagesSelected.value?.[0] || '' }}
+                            <span *ngIf="(languagesSelected.value?.length || 0) > 1"
+                                class="example-additional-selection">
+                                +{{ (languagesSelected.value?.length || 0) - 1 }}
+                            </span>
+                        </mat-select-trigger>
+                        <mat-option *ngFor="let language of languages" [value]="language">{{ language }}</mat-option>
+                    </mat-select>
+                    <div class="error-text" *ngIf="languagesSelected.invalid && languagesSelected.touched">This field is
+                        required.</div>
+                </div>
+
+
+                <div class="form-group">
+                    <label>Gender <span class="required">*</span></label>
+                    <mat-radio-group [formControl]="gender" class="gender-group"
+                        [ngClass]="{ 'invalid': gender.invalid && gender.touched }">
+                        <mat-radio-button value="male">Male</mat-radio-button>
+                        <mat-radio-button value="female">Female</mat-radio-button>
+                        <mat-radio-button value="others">Other</mat-radio-button>
+                    </mat-radio-group>
+                    <div class="error-text" *ngIf="gender.invalid && gender.touched">This field is required.</div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="phone">Phone Number <span class="required">*</span></label>
+                    <input id="phone" type="tel" [formControl]="phone" placeholder="+91 XXXXXXXXXX"
+                        [ngClass]="{ 'invalid': phone.invalid && phone.touched }" />
+                    <div class="error-text" *ngIf="phone.invalid && phone.touched">Enter valid 10-digit phone number.
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input id="email" type="email" [formControl]="email" placeholder="example@domain.com" />
+                </div>
+
+
+                <div class="form-group">
+                    <label>Vehicle Type <span class="required">*</span></label>
+                    <mat-select [formControl]="vehicle" [ngClass]="{ 'invalid': vehicle.invalid && vehicle.touched }">
+                        <mat-option value="" disabled hidden>Select Vehicle Type</mat-option>
+                        <mat-option *ngFor="let v of vehicleTypes" [value]="v">{{ v }}</mat-option>
+                    </mat-select>
+                    <div class="error-text" *ngIf="vehicle.invalid && vehicle.touched">This field is required.</div>
+                </div>
+
+
+                <div *ngIf="vehicle.value && vehicle.value !== 'none'" class="form-group">
+                    <label for="vehicleNumber">Vehicle Number <span class="required">*</span></label>
+                    <input id="vehicleNumber" type="text" [formControl]="vehicleNumber"
+                        [ngClass]="{ 'invalid': vehicleNumber.invalid && vehicleNumber.touched }" />
+                    <div class="error-text" *ngIf="vehicleNumber.invalid && vehicleNumber.touched">This field is
+                        required.</div>
+                </div>
+
+
+                <div class="form-group">
+                    <label>KYC Document <span class="required">*</span></label>
+                    <button class="kyc" (click)="openDialog()">+</button>
+                </div>
+
+
+                <div class="form-group next">
+                    <button mat-raised-button color="primary" (click)="onClickingNext()">Next</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- STEP 2: Additional Docs -->
+        <div *ngIf="step === 2">
+            <div class="head">
+                <h1 class="header-title">Additional Documents</h1>
+                <p class="subtext">Upload related documents. This step is optional.</p>
+            </div>
+            <form class="additional-form helper-form">
+                <div class="form-group">
+                    <input class="kyc" placeholder="+" />
+                </div>
+                <div class="form-group next">
+                    <button mat-raised-button color="primary" class="next" (click)="onClickingNext()">Next</button>
+                    <button mat-raised-button color="primary" class="next" (click)="onClickPrevious()">Previous</button>
+                </div>
+            </form>
+        </div>
+        <!-- STEP 3: review-->
+        <div *ngIf="step===3">
+           <app-display-helper [helperData]="previewHelper" [showActions]="false"></app-display-helper>
+           <div class="form-group next">
+                    <button  mat-raised-button color="primary" class="next" (click)="onSubmit()">Add User</button>
+
+                    <button mat-raised-button color="primary" class="next" (click)="onClickPrevious()">Previous</button>
+                </div>
+        </div>
+    </div>
+</div>

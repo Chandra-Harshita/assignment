@@ -5,12 +5,12 @@
             <h2>{{ helper.name }}</h2>
             <p>{{ helper.typeOfService }}</p>
         </div>
-        <div class="actions">
-            <button mat-fab color="">
+        <div class="actions" *ngIf="showActions">
+            <button mat-fab>
                 <mat-icon>edit</mat-icon>
             </button>
 
-            <button mat-fab color="">
+            <button mat-fab (click)="onDeleteHelper()">
                 <mat-icon>delete</mat-icon>
             </button>
         </div>
@@ -18,16 +18,10 @@
 
     <hr />
 
-    <div class="section">
+    <div class="section" *ngIf="showActions">
         <h4>IDENTIFICATION</h4>
         <p>Employee Code: {{ helper.employeeCode }}</p>
-        <p>KYC Document: <a [href]="helper.filePath" target="_blank">View {{ helper.fileType }}</a></p>
-        <p *ngIf="helper.otherDocuments?.length">Other Documents:</p>
-        <ul *ngIf="helper.otherDocuments?.length">
-            <li *ngFor="let doc of helper.otherDocuments">
-                <a [href]="doc" target="_blank">View</a>
-            </li>
-        </ul>
+
     </div>
 
     <div class="section">
@@ -38,6 +32,13 @@
         <p *ngIf="helper && helper?.languages?.length">Languages: {{ (helper && helper.languages?.length
             )?helper.languages?.join(', ') : '' }}</p>
         <p *ngIf="helper.vehicleType">Vehicle Type: {{ helper.vehicleType }}</p>
+        <p>KYC Document: <a [href]="helper.filePath" target="_blank">View {{ helper.fileType }}</a></p>
+        <p *ngIf="helper.otherDocuments?.length">Other Documents:</p>
+        <ul *ngIf="helper.otherDocuments?.length">
+            <li *ngFor="let doc of helper.otherDocuments">
+                <a [href]="doc" target="_blank">View</a>
+            </li>
+        </ul>
     </div>
 
     <div class="section">

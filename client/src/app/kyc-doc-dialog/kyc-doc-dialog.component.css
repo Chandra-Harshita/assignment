@@ -20,4 +20,5 @@ mat-select {
     background-color: white;
     margin-right:10px;
     font-size: larger;
+    cursor: pointer;
 }

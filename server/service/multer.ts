@@ -4,9 +4,10 @@ import path from 'path';
 
 const storage = multer.diskStorage({
   destination: (req: Request, file: Express.Multer.File, cb) => {
-    if (file.fieldname=='profilePicture') {
+    console.log(req)
+    if (file.fieldname == 'profilePicture') {
       cb(null, 'uploads/profilePhotos/');
-    } else if (file.fieldname == 'KYCDocument' || file.fieldname=='otherDocuments') {
+    } else if (file.fieldname == 'KYCDocument' || file.fieldname == 'otherDocuments') {
       cb(null, 'uploads/documents/');
     } else {
       cb(new Error('Unsupported file type'), '');

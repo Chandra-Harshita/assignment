@@ -19,7 +19,12 @@ const validate = (req: Request, helper: Partial<IUser>): string[] => {
   if (!Object.values(serviceEnum).includes(helper.typeOfService as serviceEnum)) err.push('select valid type of service')
   if (!Object.values(genderEnum).includes(helper.gender as genderEnum)) err.push('enter valid gender')
   if (!Object.values(fileTypeEnum).includes(helper.fileType as fileTypeEnum)) err.push('enter valid file type')
-
+   if (
+    helper.vehicleType &&
+    helper.vehicleType !== vehicleTypesEnum.NONE
+  ) {
+    err.push('Enter a valid vehicle number (e.g. MH12AB1234)')
+  }
   if (!helper.filePath) err.push('attach the KYC document')
 
   return err;

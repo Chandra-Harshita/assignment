@@ -19,9 +19,11 @@ export interface Helper {
   phone: number;
   languages: string[];
   email?: string;
-  filePath: string;
+  filePath:string;
+  KYCDocument: File;
   fileType: string;
   vehicleType?: string;
+  vehicleNumber?:string;
   employeeCode: number;
   profilePicturePath?: string;
   otherDocuments?: string[];

@@ -40,4 +40,7 @@ export class ListofhelpersComponent implements OnInit {
   onHelperClick(id: string) {
     this.helper = id
   }
+  onUserDeleted(): void {
+    this.getAllHelpers();
+  }
 }
