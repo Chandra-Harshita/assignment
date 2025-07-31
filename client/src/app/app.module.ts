@@ -18,11 +18,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { ListofhelpersComponent } from './listofhelpers/listofhelpers.component';
 import { MatListModule } from '@angular/material/list';
 import { HomeComponent } from './home/home.component';
-import {MatSelectModule} from '@angular/material/select';
-import {MatRadioModule} from '@angular/material/radio';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatDialogModule } from '@angular/material/dialog';
 import { KycDocDialogComponent } from './kyc-doc-dialog/kyc-doc-dialog.component';
 import { DeleteConfirmationDialogComponent } from './delete-confirmation-dialog/delete-confirmation-dialog.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import {MatMenuModule} from '@angular/material/menu';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -31,7 +35,8 @@ import { DeleteConfirmationDialogComponent } from './delete-confirmation-dialog/
     ListofhelpersComponent,
     HomeComponent,
     KycDocDialogComponent,
-    DeleteConfirmationDialogComponent
+    DeleteConfirmationDialogComponent,
+    PageNotFoundComponent
   ],
   imports: [
     MatToolbarModule,
@@ -51,8 +56,9 @@ import { DeleteConfirmationDialogComponent } from './delete-confirmation-dialog/
     ReactiveFormsModule,
     MatSelectModule,
     MatRadioModule,
-    MatDialogModule
-    
+    MatDialogModule,
+    MatMenuModule,
+    MatCheckboxModule
   ],
   providers: [
     provideAnimationsAsync()

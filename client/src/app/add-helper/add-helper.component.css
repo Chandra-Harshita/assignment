@@ -1,4 +1,8 @@
-
+body{
+     margin: 0;
+    height: 100vh;
+    overflow: hidden;
+}
 .container {
     display: flex;
     flex-direction: row;
@@ -10,11 +14,13 @@
 
 
 .sidebar {
+    position: fixed;
+    top:40px;
     width: 220px;
     padding: 20px;
     border-radius: 8px;
     flex-shrink: 0;
-    
+   
 }
 
 .sidebar ul {
@@ -41,6 +47,7 @@
     font-size: 2rem;
     margin-bottom: 30px;
     gap:20px;
+    font-weight: 600;
 }
 
 .back-button {
@@ -51,8 +58,10 @@
     cursor: pointer;
 }
 .right-container {
-    flex: 1;
-    max-width: 800px;
+    flex:1;
+    margin-left: 350px;
+    max-width: 900px;
+    overflow-y: auto;
 }
 
 .head {
@@ -151,10 +160,21 @@ mat-select {
 .upload-note {
     font-size: 0.85rem;
     color: #666;
-    text-align: center;
     margin-top: 10px;
 }
 
+.reupload-button {
+  background: none;
+  border: none;
+  font-size: 25px;
+  cursor: pointer;
+  margin-left: -50px;
+  height: 10px;
+}
+
+.upload-btn {
+  margin-top: 8px;
+}
 
 .file-name {
     margin-top: 10px;
@@ -182,6 +202,9 @@ mat-select {
     background-color: #bbb;
 }
 
+.file-preview{
+    display: flex;
+}
 
 button[type="submit"] {
     padding: 12px 30px;

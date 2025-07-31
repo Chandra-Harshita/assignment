@@ -1,9 +1,9 @@
-<div *ngIf="helpersData.length==0" class="nodata"> NO DATA!!!!!</div>
-<div *ngIf="helpersData.length>0" class="container">
+<div *ngIf="!helpersData || helpersData.length==0" class="nodata"> NO HELPERS!!!!!</div>
+<div *ngIf="helpersData && helpersData.length>0" class="container">
     <mat-list class="left-list">
         <mat-list-item *ngFor="let helper of helpersData" class="floating-item" (click)="onHelperClick(helper._id)">
             <mat-icon matListItemIcon>
-                <img [src]="helper.profilePicturePath ? '' : '../assets/default-profile.png'" alt="profile"
+                <img [src]="helper.profilePicturePath ? getPath(helper) : '../assets/default-profile.png'" alt="profile"
                     height="40px" width="40px" />
             </mat-icon>
             <h3 matListItemTitle>{{ helper.name }}</h3>

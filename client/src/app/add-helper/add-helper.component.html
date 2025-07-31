@@ -2,12 +2,13 @@
     <div class="sidebar">
         <div class="back">
             <button class="back-button" (click)="goTohome()">&lt;</button>
-            <div>Add Helper</div>
+            <div *ngIf="!edit">Add Helper</div>
+            <div *ngIf="edit">Edit Helper</div>
         </div>
         <ul>
-            <li [class.active]="step === 1">Helper Details</li>
-            <li [class.active]="step === 2">Documents</li>
-            <li [class.active]="step === 3">Review</li>
+            <li [class.active]="step === 1" (click)="onClickSideBar(1)">Helper Details</li>
+            <li [class.active]="step === 2" (click)="onClickSideBar(2)">Documents</li>
+            <li *ngIf="!edit" [class.active]="step === 3" (click)="onClickSideBar(3)">Review</li>
         </ul>
     </div>
 
@@ -74,6 +75,7 @@
                                 +{{ (languagesSelected.value?.length || 0) - 1 }}
                             </span>
                         </mat-select-trigger>
+                        <mat-option value="" (click)="selectAllLanguages()">Select All</mat-option>
                         <mat-option *ngFor="let language of languages" [value]="language">{{ language }}</mat-option>
                     </mat-select>
                     <div class="error-text" *ngIf="languagesSelected.invalid && languagesSelected.touched">This field is
@@ -127,14 +129,26 @@
                 </div>
 
 
-                <div class="form-group">
+                <div class="form-group" *ngIf="!edit">
                     <label>KYC Document <span class="required">*</span></label>
                     <button class="kyc" (click)="openDialog()">+</button>
                 </div>
+                <div *ngIf="edit">
+                    <div class="form-group">
+                        <label>KYC Document <span class="required">*</span></label>
+                        <div class="file-preview">
+                            <a [href]="kycPath"><img src="../../assets/pdf.png" alt="PDF" class="file-icon"></a>
+                            <button type="button" class="reupload-button" (click)="triggerFileInput()"><img src="../../assets/image.png" alt="reupload" ></button>
+                        </div>
+                    </div>
 
+                </div>
 
                 <div class="form-group next">
-                    <button mat-raised-button color="primary" (click)="onClickingNext()">Next</button>
+                    <button *ngIf="!edit" mat-raised-button color="primary" (click)="onClickingNext()">Next</button>
+                </div>
+                <div class="form-group next">
+                    <button *ngIf="edit" mat-raised-button color="primary" (click)="onSave()">Save</button>
                 </div>
             </form>
         </div>
@@ -149,20 +163,22 @@
                 <div class="form-group">
                     <input class="kyc" placeholder="+" />
                 </div>
-                <div class="form-group next">
+                <div class="form-group next" *ngIf="!edit">
                     <button mat-raised-button color="primary" class="next" (click)="onClickingNext()">Next</button>
                     <button mat-raised-button color="primary" class="next" (click)="onClickPrevious()">Previous</button>
                 </div>
+                <div *ngIf="edit"><button mat-raised-button color="primary" class="next"
+                        (click)="onSave()">Save</button></div>
             </form>
         </div>
-        <!-- STEP 3: review-->
-        <div *ngIf="step===3">
-           <app-display-helper [helperData]="previewHelper" [showActions]="false"></app-display-helper>
-           <div class="form-group next">
-                    <button  mat-raised-button color="primary" class="next" (click)="onSubmit()">Add User</button>
+        <!-- STEP 3: review -->
+        <div *ngIf="step===3 && !edit">
+            <app-display-helper [helperData]="previewHelper" [showActions]="false"></app-display-helper>
+            <div class="form-group next">
+                <button mat-raised-button color="primary" class="next" (click)="onSubmit()">Add User</button>
 
-                    <button mat-raised-button color="primary" class="next" (click)="onClickPrevious()">Previous</button>
-                </div>
+                <button mat-raised-button color="primary" class="next" (click)="onClickPrevious()">Previous</button>
+            </div>
         </div>
     </div>
 </div>

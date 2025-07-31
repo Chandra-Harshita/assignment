@@ -1,23 +1,48 @@
 <div class="header">
     <div class="left-controls">
-        <button mat-fab>
-            <mat-icon>sort</mat-icon>
+        <button mat-fab color="" class="button" (click)="toogleSort()">
+            <mat-icon> sort</mat-icon>
         </button>
-
-        <button mat-fab>
+        <div class="sort-dropdown" *ngIf="sortDropDown">
+            <div>Sort By</div>
+            <div class="sort-div" [ngClass]="{'active':isActiveName}" (click)="selectName()">Helpers Name(A-Z) <span *ngIf="isActiveName">✓</span></div>
+            <div class="sort-div" [ngClass]="{'active':isActiveId}" (click)="selectId()">Employee ID <span *ngIf="isActiveId">✓</span></div>
+        </div>
+        <button mat-fab color="" (click)="toogleFilter()" class="button">
             <mat-icon>filter_alt</mat-icon>
         </button>
-
-        <input type="text" placeholder="Filter by city" #filter>
-        <button class="search-btn" type="button">Search</button>
+        <div class="dropdown" *ngIf="filterDropdownOpen">
+            <div class="top">
+                <div>Filter By</div>
+                <button class="button" (click)="resetFilters()">Reset</button>
+            </div>
+            <form>
+                <div class="top"><div>Service</div> <button class="reset" (click)="resetServices()">Reset</button></div>
+                <mat-select [formControl]="servicesSelected" multiple>
+                        <mat-option (click)="selectAllServices()" value="selectAll">select All</mat-option>
+                        <mat-option *ngFor="let service of services" [value]="service">{{service }}</mat-option>
+                    </mat-select>
+                <div class="top"><div>Organization</div> <button class="reset" (click)="resetOrganization()">Reset</button></div>
+                <mat-select [formControl]="organizationsSelected" multiple>
+                        <mat-option (click)="selectAllOrganizations()" value="selectAll">Select All</mat-option>
+                        <mat-option *ngFor="let org of organizations" [value]="org">{{org }}</mat-option>
+                    </mat-select>
+                <div class="apply">
+                <button class="button" (click)="toogleFilter()">Cancel</button>
+                <button class=" button" (click)="getSpecificUsers(true)">Apply</button>
+                </div>
+            </form>
+        </div>
+        <input type="text" placeholder="search...." #filter [(ngModel)]="searchPattern" (ngModelChange)="getSpecificUsers()">
+        <div><span *ngIf="isApply && ((organizationsSelected.value ? organizationsSelected.value.length>0 : false )|| (servicesSelected.value?servicesSelected.value.length>0:false) || searchPattern.length>0)">{{helpersData.length}} of</span> {{TotHelpers}} helpers</div>
     </div>
 
     <div class="right-controls">
-        <button mat-fab (click)="goToHome()">
+        <button mat-fab (click)="goToHome()"  class="button">
             <mat-icon>add</mat-icon>
         </button>
-        <span class="add-label">Add</span>
+        <span class="add-label " color="">Add</span>
     </div>
 </div>
 
-<app-listofhelpers></app-listofhelpers>
+<app-listofhelpers [helpersDetails]="helpersData" (updateList)="getSpecificUsers()"></app-listofhelpers>

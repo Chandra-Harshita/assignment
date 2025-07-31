@@ -44,7 +44,7 @@ export interface IUser extends Document {
   typeOfService: string
   organization: string
   name: string
-  languages: string[]
+  languages: string[]|string
   gender: string
   phone: number
   email?: string

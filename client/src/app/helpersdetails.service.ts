@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { ApiResponse, Helper } from './helpers.model';
+import { ApiResponse, filter, Helper } from './helpers.model';
 @Injectable({
   providedIn: 'root'
 })
@@ -16,8 +16,12 @@ export class HelpersdetailsService {
   url2: string = 'http://localhost:3000/helpers/get/'
   urlToDelete: string = 'http://localhost:3000/helpers/delete/'
   urlToAdd: string = 'http://localhost:3000/helpers/add'
-  getData(): Observable<ApiResponse> {
-    return this.http.get<ApiResponse>(this.url1)
+  urlToUpdate: string = 'http://localhost:3000/helpers/update/'
+  urlForSpecificUsers:string='http://localhost:3000/helpers/getspecificusers'
+
+  getData(data:any): Observable<ApiResponse> {
+    const params=new HttpParams({ fromObject: data })
+    return this.http.get<ApiResponse>(this.url1,{params})
   }
   getSingleHelperData(id: string): Observable<ApiResponse> {
     return this.http.get<ApiResponse>(this.url2 + `${id}`)
@@ -25,8 +29,16 @@ export class HelpersdetailsService {
   deleteHelperData(id: string): Observable<ApiResponse> {
     return this.http.delete<ApiResponse>(this.urlToDelete + `${id}`)
   }
-  addhelper(data: Partial<Helper>): Observable<ApiResponse> {
-    console.log("hi there", data);
+  addhelper(data: FormData): Observable<ApiResponse> {
+    // console.log(data)
     return this.http.post<ApiResponse>(this.urlToAdd, data)
   }
+  updateHelper(id: string, data: FormData): Observable<ApiResponse> {
+    return this.http.put<ApiResponse>(this.urlToUpdate + `${id}`, data)
+  }
+  getSpecificUsers(data:any): Observable<ApiResponse>{
+    const params=new HttpParams({ fromObject: data })
+    return this.http.get<ApiResponse>(this.urlForSpecificUsers,{params})
+  }
 }
+

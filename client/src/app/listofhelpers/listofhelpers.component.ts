@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { HelpersdetailsService } from '../helpersdetails.service';
-import { helpers } from '../helpers.model';
+import { Helper, helpers } from '../helpers.model';
 
 
 @Component({
@@ -8,39 +8,34 @@ import { helpers } from '../helpers.model';
   templateUrl: './listofhelpers.component.html',
   styleUrl: './listofhelpers.component.css'
 })
-export class ListofhelpersComponent implements OnInit {
-  helpersData: helpers[] = []
-  helper: string = '';
+export class ListofhelpersComponent {
+    helper: string = '';
+    helpersData:helpers[]=[]
+   @Input() set helpersDetails(data: helpers[]) {
+    if (data) {
+      this.helpersData=data
+      this.helper = data[0]?._id
+    }
+  }
+  @Output() updateList=new EventEmitter<string>()
   constructor(private userdatailsservice: HelpersdetailsService) { }
 
-  ngOnInit() {
-    this.initialData();
+  //async initialData() {
+  //  return new Promise<void>(async (resolve) => {
+  //    await this.getAllHelpers();
+  //    resolve();
+  //  })
+  // }
+
+  getPath(helper:Partial<Helper>):string{
+    return `http://localhost:3000/${helper.profilePicturePath}`
   }
 
-  async initialData() {
-    return new Promise<void>(async (resolve) => {
-      await this.getAllHelpers();
-      resolve();
-    })
-  }
-
-
-
-  getAllHelpers() {
-    this.userdatailsservice.getData().subscribe(response => {
-      if (response.success) {
-        this.helpersData = response.data;
-        this.helper = this.helpersData[0]._id;
-      }
-      else
-        console.error('API returned failure');
-      
-    })
-  }
+ 
   onHelperClick(id: string) {
     this.helper = id
   }
   onUserDeleted(): void {
-    this.getAllHelpers();
+    this.updateList.emit()
   }
 }

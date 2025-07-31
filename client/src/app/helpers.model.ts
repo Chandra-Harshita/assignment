@@ -8,7 +8,7 @@ export interface helpers {
 export interface ApiResponse {
   success: boolean;
   message: string;
-  data: helpers[];
+  data: helpers[]|string;
 }
 export interface Helper {
   _id: string,
@@ -26,6 +26,12 @@ export interface Helper {
   vehicleNumber?:string;
   employeeCode: number;
   profilePicturePath?: string;
+  profilePicture?:File;
   otherDocuments?: string[];
   createdAt: string
+}
+
+export interface filter{
+  typeOfService: string[];
+  organization: string[];
 }
