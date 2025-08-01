@@ -2,7 +2,8 @@ export interface helpers {
   _id: string;
   name: string,
   typeOfService: string,
-  profilePicturePath?: string
+  profilePicturePath?: string,
+  employeeCode:number
 }
 
 export interface ApiResponse {
@@ -31,7 +32,4 @@ export interface Helper {
   createdAt: string
 }
 
-export interface filter{
-  typeOfService: string[];
-  organization: string[];
-}
+

@@ -8,7 +8,9 @@ const validate = (req: Request, helper: Partial<IUser>,flag:boolean): string[] =
   const err: string[] = []
   if(flag){
      for(const key in helper ){
-      console.log(key,helper[key as keyof IUser])
+      if(key=='name'){
+        if (!helper.name || !helper.name.trim()) err.push('Name is required')
+      } 
       if(!helper[key as keyof IUser]) err.push(`${key} is required`)
      }
   }
@@ -28,7 +30,7 @@ const validate = (req: Request, helper: Partial<IUser>,flag:boolean): string[] =
   if (!Object.values(fileTypeEnum).includes(helper.fileType as fileTypeEnum)) err.push('enter valid file type')
   if (
     helper.vehicleType &&
-    helper.vehicleType !== vehicleTypesEnum.NONE
+    helper.vehicleType !== vehicleTypesEnum.NONE && !helper.vehicleNumber
   ) {
     err.push('Enter a valid vehicle number (e.g. MH12AB1234)')
   }
@@ -48,7 +50,7 @@ const getResMessage = (res: Response, statuscode: number, success: boolean, mess
 export const getAllHelpers = async (req: Request, res: Response) => {
   try {
     const sortField:string=req.query.sortField as string|| 'name'
-    const helpers: IUser[] = await userModel.find().select('name typeOfService profilePicturePath').sort(sortField)
+    const helpers: IUser[] = await userModel.find().select('name typeOfService profilePicturePath employeeCode').sort(sortField)
     
     if (helpers.length > 0) {
       getResMessage(res, 200, true, 'Helpers fetched', helpers)
@@ -153,6 +155,7 @@ export const addHelper = async (req: Request, res: Response) => {
       if (err.length > 0) {
         getResMessage(res, 422, false, 'enter valid details', err)
       } else {
+        console.log(helper);
         const newHelper: IUser = await userModel.create(helper)
         getResMessage(res, 201, true, 'Helper created successfully', newHelper)
       }
@@ -164,7 +167,7 @@ export const addHelper = async (req: Request, res: Response) => {
 }
 export const getSpecificHelpers = async (req: Request, res: Response) => {
   try {
-     const sortField:string=req.query.sortField as string|| 'name'
+     const sortField:string=(req.query.sortField as string) || 'name'
     const services = Array.isArray(req.query.typeOfService)
       ? req.query.typeOfService
       : req.query.typeOfService ? [req.query.typeOfService] : [];
@@ -174,7 +177,7 @@ export const getSpecificHelpers = async (req: Request, res: Response) => {
     const patternInName=req.query.name
       
     if (!services.length && !organizations.length && !patternInName) {
-      const helpers=await userModel.find({}).select('name typeOfService profilePicturePath').sort(sortField);
+      const helpers=await userModel.find({}).select('name typeOfService profilePicturePath employeeCode').sort(sortField);
       return getResMessage(res, 200, true, 'No filters selected',helpers);
     }
     
@@ -185,7 +188,7 @@ export const getSpecificHelpers = async (req: Request, res: Response) => {
     };
     const helpers = await userModel
       .find(details)
-      .select('name typeOfService profilePicturePath');
+      .select('name typeOfService profilePicturePath employeeCode').sort(sortField);
 
     getResMessage(res, 200, true, 'Helpers fetched successfully', helpers);
   } catch (e) {

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ɵprovideZonelessChangeDetection } from '@angular/core';
 import { HelpersdetailsService } from '../helpersdetails.service';
 import { Helper, helpers } from '../helpers.model';
 
@@ -17,6 +17,17 @@ export class ListofhelpersComponent {
       this.helper = data[0]?._id
     }
   }
+  @Input() set sortField(field:string){
+      if(field=='name'){
+       this.helpersData.sort((a,b)=>a.name.localeCompare(b.name))
+    }
+    else{
+       console.log("hey there")
+       console.log(this.helpersData)
+       this.helpersData.sort((a,b)=>a.employeeCode-b.employeeCode)
+    }
+    this.helper = this.helpersData[0]?._id
+  }
   @Output() updateList=new EventEmitter<string>()
   constructor(private userdatailsservice: HelpersdetailsService) { }
 
@@ -31,7 +42,6 @@ export class ListofhelpersComponent {
     return `http://localhost:3000/${helper.profilePicturePath}`
   }
 
- 
   onHelperClick(id: string) {
     this.helper = id
   }

@@ -3,8 +3,9 @@ import { FormControl, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { KycDocDialogComponent } from '../kyc-doc-dialog/kyc-doc-dialog.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Helper } from '../helpers.model';
+import { ApiResponse, Helper } from '../helpers.model';
 import { HelpersdetailsService } from '../helpersdetails.service';
+import { ErrorDialogComponent } from '../error-dialog/error-dialog.component';
 
 @Component({
   selector: 'app-add-helper',
@@ -18,7 +19,7 @@ export class AddHelperComponent implements OnInit {
   helper!: Partial<Helper>
   edit: boolean = false
   originalHelperData: Partial<Helper> = {};
-  kycPath:string=''
+  kycPath: string = ''
   name = new FormControl('', Validators.required);
   languagesSelected = new FormControl<string[]>([], Validators.required);
   service = new FormControl('', Validators.required);
@@ -31,8 +32,10 @@ export class AddHelperComponent implements OnInit {
   fileType: string = ''
   file!: File
   photoFile: File | null = null;
+  size: number = 5 * 1024 * 1024
 
   dialogRef?: MatDialogRef<KycDocDialogComponent, any>;
+  dialofRefError?: MatDialogRef<ErrorDialogComponent, any>
 
   services: string[] = ['maid', 'cook', 'nurse', 'driver', 'plumber', 'newspaper', 'laundry'];
   organizations: string[] = ['ASBL', 'Springs Helpers'];
@@ -67,9 +70,9 @@ export class AddHelperComponent implements OnInit {
           this.email.setValue(this.helper.email ?? '')
           this.vehicle.setValue(this.helper.vehicleType ?? '')
           this.vehicleNumber.setValue(this.helper.vehicleNumber ?? '')
-          this.fileType=this.helper.fileType??''
-          this.kycPath=`http://localhost:3000/${this.helper.filePath}`
-          this.file!=this.helper.KYCDocument
+          this.fileType = this.helper.fileType ?? ''
+          this.kycPath = `http://localhost:3000/${this.helper.filePath}`
+          this.file != this.helper.KYCDocument
         } else {
           console.error('API returned failure');
         }
@@ -80,13 +83,17 @@ export class AddHelperComponent implements OnInit {
     );
 
   }
-  triggerFileInput():void{
-     this.openDialog()
+  triggerFileInput(): void {
+    this.openDialog()
   }
   onPhotoSelected(event: any): void {
     const file = event.target.files[0];
-    if (file) {
+
+    if (file && file.size<this.size) {
       this.photoFile = file;
+    }
+    else{
+      alert('upload a image of size less than 5MB')
     }
   }
 
@@ -205,31 +212,31 @@ export class AddHelperComponent implements OnInit {
   }
 
   getUpdatedFields(): Partial<Helper> {
-  const updated: Partial<Helper> = {};
+    const updated: Partial<Helper> = {};
 
-  if (this.name.value !== this.originalHelperData.name) updated.name = this.name.value??'';
-  if (this.phone.value !== String(this.originalHelperData.phone ?? '')) updated.phone = Number(this.phone.value);
-  if (this.gender.value !== this.originalHelperData.gender) updated.gender = this.gender.value??'';
-  if (this.email.value !== this.originalHelperData.email) updated.email = this.email.value??'';
-  if (this.service.value !== this.originalHelperData.typeOfService) updated.typeOfService = this.service.value??'';
-  if (this.organization.value !== this.originalHelperData.organization) updated.organization = this.organization.value??'';
-  if ((this.languagesSelected.value || []).toString() !== (this.originalHelperData.languages || []).toString())
-    updated.languages = this.languagesSelected.value ?? [];
-  if (this.vehicle.value !== this.originalHelperData.vehicleType) updated.vehicleType = this.vehicle.value??'';
-  if (this.vehicle.value !== 'none' && this.vehicleNumber.value !== this.originalHelperData.vehicleNumber)
-    updated.vehicleNumber = this.vehicleNumber.value??'';
+    if (this.name.value !== this.originalHelperData.name) updated.name = this.name.value ?? '';
+    if (this.phone.value !== String(this.originalHelperData.phone ?? '')) updated.phone = Number(this.phone.value);
+    if (this.gender.value !== this.originalHelperData.gender) updated.gender = this.gender.value ?? '';
+    if (this.email.value !== this.originalHelperData.email) updated.email = this.email.value ?? '';
+    if (this.service.value !== this.originalHelperData.typeOfService) updated.typeOfService = this.service.value ?? '';
+    if (this.organization.value !== this.originalHelperData.organization) updated.organization = this.organization.value ?? '';
+    if ((this.languagesSelected.value || []).toString() !== (this.originalHelperData.languages || []).toString())
+      updated.languages = this.languagesSelected.value ?? [];
+    if (this.vehicle.value !== this.originalHelperData.vehicleType) updated.vehicleType = this.vehicle.value ?? '';
+    if (this.vehicle.value !== 'none' && this.vehicleNumber.value !== this.originalHelperData.vehicleNumber)
+      updated.vehicleNumber = this.vehicleNumber.value ?? '';
 
-  if (this.file && this.file !== this.helper.KYCDocument) {
-    updated.KYCDocument = this.file;
-    updated.fileType = this.fileType;
+    if (this.file && this.file !== this.helper.KYCDocument) {
+      updated.KYCDocument = this.file;
+      updated.fileType = this.fileType;
+    }
+
+    if (this.photoFile) {
+      updated.profilePicture = this.photoFile;
+    }
+
+    return updated;
   }
-
-  if (this.photoFile) {
-    updated.profilePicture = this.photoFile;
-  }
-
-  return updated;
-}
 
 
   onSubmit(): void {
@@ -240,37 +247,44 @@ export class AddHelperComponent implements OnInit {
         // console.log('Helper added successfully:', res);
         this.router.navigate(['/']);
       },
-      error: (err) => {
-        console.error('Error adding helper:', err);
+      error: (err: Response) => {
+        this.dialofRefError = this.dialog.open(ErrorDialogComponent, {
+          height: '400px',
+          width: '600px',
+          data: err
+        });
       }
     });
   }
   onSave() {
-  if (!this.userId) return;
+    if (!this.userId) return;
 
-  const updatedFields = this.getUpdatedFields();
+    const updatedFields = this.getUpdatedFields();
 
-  const form = new FormData();
-  for (const key in updatedFields) {
-    const val = updatedFields[key as keyof Helper];
-    if (val instanceof File) {
-      form.append(key, val);
-    } else if (Array.isArray(val)) {
-      form.append(key, val.join(','));
-    } else if (val !== undefined) {
-      form.append(key, val.toString());
+    const form = new FormData();
+    for (const key in updatedFields) {
+      const val = updatedFields[key as keyof Helper];
+      if (val instanceof File) {
+        form.append(key, val);
+      } else if (Array.isArray(val)) {
+        form.append(key, val.join(','));
+      } else if (val !== undefined) {
+        form.append(key, val.toString());
+      }
     }
-  }
 
-  this.userdetailsservice.updateHelper(this.userId, form).subscribe({
-    next: res => {
-      console.log('Helper updated successfully:', res);
-      this.router.navigate(['/']);
-    },
-    error: err => {
-      console.error('Error updating helper:', err);
-    }
-  });
+    this.userdetailsservice.updateHelper(this.userId, form).subscribe({
+      next: res => {
+        this.router.navigate(['/']);
+      },
+      error: err => {
+        this.dialofRefError = this.dialog.open(ErrorDialogComponent, {
+          height: '400px',
+          width: '600px',
+          data: err
+        });
+      }
+    });
     // if(this.userId) this.userdatailsservice.updateHelper(this.userId,form).subscribe({
     //   next: (res) => {
     //      console.log('Helper updated successfully:', res);
@@ -281,8 +295,8 @@ export class AddHelperComponent implements OnInit {
     //   }
     // });
   }
-  selectAllLanguages(){
-    if(this.languagesSelected.value?.length==6) this.languagesSelected.setValue([]) 
-    else  this.languagesSelected.setValue([...this.languages,""])
+  selectAllLanguages() {
+    if (this.languagesSelected.value?.length == 6) this.languagesSelected.setValue([])
+    else this.languagesSelected.setValue([...this.languages])
   }
 }

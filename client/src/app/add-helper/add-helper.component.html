@@ -2,8 +2,8 @@
     <div class="sidebar">
         <div class="back">
             <button class="back-button" (click)="goTohome()">&lt;</button>
-            <div *ngIf="!edit">Add Helper</div>
-            <div *ngIf="edit">Edit Helper</div>
+            <div *ngIf="!edit" class="header-title">Add Helper</div>
+            <div *ngIf="edit" class="header-title">Edit Helper</div>
         </div>
         <ul>
             <li [class.active]="step === 1" (click)="onClickSideBar(1)">Helper Details</li>

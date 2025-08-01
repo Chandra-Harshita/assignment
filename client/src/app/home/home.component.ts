@@ -42,6 +42,14 @@ export class HomeComponent {
         console.error('API returned failure');
     })
   }
+  sortHelpers(){
+    if(this.sortField==='name'){
+       this.helpersData.sort((a,b)=>a.name.localeCompare(b.name))
+    }
+    else{
+       this.helpersData.sort((a,b)=>a.employeeCode-b.employeeCode)
+    }
+  }
   getSpecificUsers(flag?:boolean){
     this.isApply=true
     if(flag){this.toogleFilter()}
@@ -57,9 +65,11 @@ export class HomeComponent {
   }
   toogleFilter(){
     this.filterDropdownOpen=!this.filterDropdownOpen
+    if(this.sortDropDown==true) this.sortDropDown=false
   }
   toogleSort(){
     this.sortDropDown=!this.sortDropDown
+    if(this.filterDropdownOpen==true) this.filterDropdownOpen=false
   }
   resetServices(){
      this.servicesSelected.setValue([])
@@ -84,13 +94,11 @@ export class HomeComponent {
     this.isActiveName=true
     this.isActiveId=false
     this.sortField='name'
-    this.getAllHelpers()
   }
   selectId(){
     console.log('selected ID')
      this.isActiveName=false
     this.isActiveId=true
     this.sortField='employeeCode'
-    this.getAllHelpers()
   }
 }

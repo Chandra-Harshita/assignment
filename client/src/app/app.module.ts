@@ -26,6 +26,7 @@ import { DeleteConfirmationDialogComponent } from './delete-confirmation-dialog/
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 import {MatMenuModule} from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ErrorDialogComponent } from './error-dialog/error-dialog.component';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     HomeComponent,
     KycDocDialogComponent,
     DeleteConfirmationDialogComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    ErrorDialogComponent
   ],
   imports: [
     MatToolbarModule,
